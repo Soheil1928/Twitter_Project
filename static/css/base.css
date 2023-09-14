@@ -3,3 +3,9 @@
     margin: 0px;
     box-sizing: border-box;
 }
+
+msg{
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 50%;
+}

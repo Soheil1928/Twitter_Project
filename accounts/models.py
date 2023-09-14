@@ -14,13 +14,16 @@ class Profile(models.Model):
     instagram_link = models.CharField(max_length=100, null=True, blank=True)
     linkedin_link = models.CharField(max_length=100, null=True, blank=True)
 
+    def __str__(self):
+        return self.user.username
 
-# @receiver(post_save, sender=User)
-# def create_profile(instance, create, **kwargs):
-#     if create:
-#         user_profile = Profile(user=instance)
-#         user_profile.save()
-#         user_profile.follows.set([instance.profile.id])
-#         user_profile.save()
+
+@receiver(post_save, sender=User)
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        user_profile = Profile(user=instance)
+        user_profile.save()
+        user_profile.follows.set([instance.profile.id])
+        user_profile.save()
 
 # post_save.connect(create_profile, sender=User) -----> this method or receiver decorator

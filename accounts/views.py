@@ -1,6 +1,7 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import RegisterForm
+from .forms import RegisterForm, ForgetPasswordForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
@@ -15,7 +16,7 @@ class RegisterView(View):
         if register_form.is_valid():
             username = register_form.cleaned_data.get('username')
             password = register_form.cleaned_data.get('password1')
-            user = authenticate(request,username=username, password=password)
+            user = authenticate(request, username=username, password=password)
             if user is None:
                 register_form.save()
                 messages.success(request, 'You Have Successfully Register.', 'success')
@@ -50,3 +51,39 @@ class LogoutView(View):
         logout(request)
         messages.success(request, 'You Have Been Logged Out...!', 'success')
         return redirect('home_page')
+
+
+class ForgetPasswordView(View):
+    def get(self, request):
+        forget_password_form = ForgetPasswordForm()
+        return render(request, 'accounts/forget_password.html', {'forget_password_form': forget_password_form})
+
+    def post(self, request):
+        forget_password_form = ForgetPasswordForm(request.POST)
+        if forget_password_form.is_valid():
+            user = User.objects.filter(username__exact=forget_password_form.cleaned_data.get('username')).first()
+            if user is not None:
+                old_pass = forget_password_form.cleaned_data.get('old_password')
+                correct_password = user.check_password(old_pass)
+                if correct_password:
+                    new_pass = forget_password_form.cleaned_data.get('new_password')
+                    confirm_new_pass = forget_password_form.cleaned_data.get('confirm_new_password')
+                    if new_pass == confirm_new_pass:
+                        user.set_password(new_pass)
+                        user.save()
+                        messages.success(request, 'Change Password Successfully... ', 'success')
+                        return redirect('login')
+                    else:
+                        messages.error(request, 'Password Is Invalid...', 'danger')
+                        return render(request, 'accounts/forget_password.html',
+                                      {'forget_password_form': forget_password_form})
+                else:
+                    messages.error(request, 'Password Is Invalid...', 'danger')
+                    return render(request, 'accounts/forget_password.html',
+                                  {'forget_password_form': forget_password_form})
+            else:
+                messages.error(request, 'Username or Password Is Invalid...', 'danger')
+                return render(request, 'accounts/forget_password.html', {'forget_password_form': forget_password_form})
+
+        messages.error(request, 'Username or Password Is Invalid...', 'danger')
+        return render(request, 'accounts/forget_password.html', {'forget_password_form': forget_password_form})

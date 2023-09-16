@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'twitter',
+    'sorl.thumbnail',
+
 ]
 
 MIDDLEWARE = [

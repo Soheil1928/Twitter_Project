@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import RegisterForm, ForgetPasswordForm
+from .forms import RegisterForm, ChangePasswordForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
@@ -53,21 +53,21 @@ class LogoutView(View):
         return redirect('home_page')
 
 
-class ForgetPasswordView(View):
+class ChangePasswordView(View):
     def get(self, request):
-        forget_password_form = ForgetPasswordForm()
-        return render(request, 'accounts/forget_password.html', {'forget_password_form': forget_password_form})
+        change_password_form = ChangePasswordForm()
+        return render(request, 'accounts/change_password.html', {'change_password_form': change_password_form})
 
     def post(self, request):
-        forget_password_form = ForgetPasswordForm(request.POST)
-        if forget_password_form.is_valid():
-            user = User.objects.filter(username__exact=forget_password_form.cleaned_data.get('username')).first()
+        change_password_form = ChangePasswordForm(request.POST)
+        if change_password_form.is_valid():
+            user = User.objects.filter(username__exact=change_password_form.cleaned_data.get('username')).first()
             if user is not None:
-                old_pass = forget_password_form.cleaned_data.get('old_password')
+                old_pass = change_password_form.cleaned_data.get('old_password')
                 correct_password = user.check_password(old_pass)
                 if correct_password:
-                    new_pass = forget_password_form.cleaned_data.get('new_password')
-                    confirm_new_pass = forget_password_form.cleaned_data.get('confirm_new_password')
+                    new_pass = change_password_form.cleaned_data.get('new_password')
+                    confirm_new_pass = change_password_form.cleaned_data.get('confirm_new_password')
                     if new_pass == confirm_new_pass:
                         user.set_password(new_pass)
                         user.save()
@@ -75,15 +75,15 @@ class ForgetPasswordView(View):
                         return redirect('login')
                     else:
                         messages.error(request, 'Password Is Invalid...', 'danger')
-                        return render(request, 'accounts/forget_password.html',
-                                      {'forget_password_form': forget_password_form})
+                        return render(request, 'accounts/change_password.html',
+                                      {'change_password_form': change_password_form})
                 else:
                     messages.error(request, 'Password Is Invalid...', 'danger')
-                    return render(request, 'accounts/forget_password.html',
-                                  {'forget_password_form': forget_password_form})
+                    return render(request, 'accounts/change_password.html',
+                                  {'change_password_form': change_password_form})
             else:
                 messages.error(request, 'Username or Password Is Invalid...', 'danger')
-                return render(request, 'accounts/forget_password.html', {'forget_password_form': forget_password_form})
+                return render(request, 'accounts/change_password.html', {'change_password_form': change_password_form})
 
         messages.error(request, 'Username or Password Is Invalid...', 'danger')
-        return render(request, 'accounts/forget_password.html', {'forget_password_form': forget_password_form})
+        return render(request, 'accounts/change_password.html', {'change_password_form': change_password_form})

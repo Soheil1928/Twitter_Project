@@ -1,6 +1,42 @@
 {% extends 'base/base.html' %}
-{% block title %} Home {% endblock %}
+{% load static %}
 
 {% block content %}
-    <h1> home page </h1>
+    <h1 style="margin-left: 80px"> Tweets </h1>
+<div class="container text-center">
+    <div class="row">
+        <div class="col-8">
+
+        {% for tweet in user_tweets %}
+        <div class="card" style="width: 30rem;">
+            {% if tweet.image_tweet %}
+                <img src="{{ tweet.image_tweet.url }}" class="card-img-top" >
+            {% endif %}
+            <div class="card-body" style="background-color: #d2cece">
+                <p class="card-text" >
+                    <b> {{ tweet.text_tweet }} </b><br>
+                    <small> ({{ tweet.create_at }}) By @{{ tweet.user.username }} </small>
+                </p>
+            </div>
+        </div><br>
+        {% endfor %}
+        </div>
+
+
+
+        <div class="col-4">
+        {% if user.is_authenticated %}
+            <form method="post" enctype="multipart/form-data" action="">
+                {% csrf_token %}
+                {{ form.as_p }}<br>
+                <button type="submit" multiple class="btn btn-secondary"> Tweet! </button>
+            </form>
+        {% endif %}
+        </div>
+
+
+
+    </div>
+</div>
+
 {% endblock %}

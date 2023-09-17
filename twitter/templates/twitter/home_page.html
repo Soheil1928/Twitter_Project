@@ -15,8 +15,18 @@
             <div class="card-body" style="background-color: #d2cece">
                 <p class="card-text" >
                     <b> {{ tweet.text_tweet }} </b><br>
-                    <small> ({{ tweet.create_at }}) By @{{ tweet.user.username }} </small>
+                    <small> ({{ tweet.create_at }}) By @{{ tweet.user.username }} &nbsp; {{ tweet.number_like }} </small>
+                    {% if user in tweet.like.all %}
+                        <a href="{% url 'like' tweet.id %}">
+                            <i class="bi bi-heart-fill" style="color: red"></i>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'like' tweet.id %}">
+                            <i class="bi bi-heart" style="color: red"></i>
+                        </a>
+                    {% endif %}
                 </p>
+
             </div>
         </div><br>
         {% endfor %}

@@ -37,7 +37,8 @@
         <ul class="navbar-ml-auto">
         <li class="nav-link nav-brand">
             {% if user.profile.profile_image %}
-                <a href="{% url 'profile_detail' request.user.id %}">
+                <a href="{% url 'profile_detail' request.user.id %}" style="text-decoration: None">
+                    <span> <b> @{{ request.user.username }} </b></span>
                     <img src="{{ user.profile.profile_image.url }}" alt="profile pic"
                          style="width: 40px;height: 40px;border-radius: 50%">
 

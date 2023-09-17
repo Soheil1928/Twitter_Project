@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.views.generic import DetailView
 from django.views.generic.list import ListView
@@ -44,7 +44,7 @@ class ProfileList(View):
             profiles = Profile.objects.exclude(user=request.user)
             return render(request, 'twitter/profile_list.html', {'profiles': profiles})
         else:
-            messages.success(request, 'You Must Be Logged In View This Page ...')
+            messages.error(request, 'You Must Be Logged In View This Page ...', 'danger')
             return redirect('home_page')
 
 
@@ -97,4 +97,19 @@ class Unfollow(View):
             return redirect(request.META.get('HTTP_REFERER'))
         else:
             messages.error(request, 'That User Dose Not Exist...!', 'danger')
+            return redirect('home_page')
+
+
+class TweetLike(View):
+    def get(self, request, pk):
+        if request.user.is_authenticated:
+            tweet = get_object_or_404(Tweet, id=pk)
+            if tweet.like.filter(id=request.user.id):
+                tweet.like.remove(request.user)
+            else:
+                tweet.like.add(request.user)
+            return redirect(request.META.get('HTTP_REFERER'))
+
+        else:
+            messages.error(request, 'You Must Be Logged In View This Page ...', 'danger')
             return redirect('home_page')

@@ -7,4 +7,5 @@ urlpatterns = [
     path('profile_detail/<int:pk>', views.ProfileDetail.as_view(), name='profile_detail'),
     path('follow/<int:pk>', views.Follow.as_view(), name='follow'),
     path('unfollow/<int:pk>', views.Unfollow.as_view(), name='unfollow'),
+    path('like/<int:pk>', views.TweetLike.as_view(), name='like'),
 ]

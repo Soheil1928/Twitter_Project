@@ -113,3 +113,31 @@ class TweetLike(View):
         else:
             messages.error(request, 'You Must Be Logged In View This Page ...', 'danger')
             return redirect('home_page')
+
+
+class Follower(View):
+    def get(self, request, pk):
+        if request.user.is_authenticated:
+            if request.user.id == pk:
+                profile: Profile = Profile.objects.get(user_id=pk)
+                return render(request, 'twitter/follows.html', {'profile': profile})
+            else:
+                messages.error(request, "That's Not Your Profile Page", 'danger')
+                return redirect('home_page')
+        else:
+            messages.success(request, "You Must Be logged To View That Page...", 'danger')
+            return redirect('home_page')
+
+
+class Following(View):
+    def get(self, request, pk):
+        if request.user.is_authenticated:
+            if request.user.id == pk:
+                profile: Profile = Profile.objects.get(user_id=pk)
+                return render(request, 'twitter/following.html', {'profile': profile})
+            else:
+                messages.error(request, "That's Not Your Profile Page", 'danger')
+                return redirect('home_page')
+        else:
+            messages.success(request, "You Must Be logged To View That Page...", 'danger')
+            return redirect('home_page')

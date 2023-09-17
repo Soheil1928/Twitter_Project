@@ -15,7 +15,11 @@
             <div class="card-body" style="background-color: #d2cece">
                 <p class="card-text" >
                     <b> {{ tweet.text_tweet }} </b><br>
-                    <small> ({{ tweet.create_at }}) By @{{ tweet.user.username }} &nbsp; {{ tweet.number_like }} </small>
+                    <small> ({{ tweet.create_at }}) By
+                        <a href="{% url 'profile_detail' tweet.user_id %}" style="text-decoration: None">
+                            <b>@{{ tweet.user.username }}</b>
+                        </a> &nbsp; {{ tweet.number_like }}
+                    </small>
                     {% if user in tweet.like.all %}
                         <a href="{% url 'like' tweet.id %}">
                             <i class="bi bi-heart-fill" style="color: red"></i>
@@ -33,13 +37,12 @@
         </div>
 
 
-
         <div class="col-4">
         {% if user.is_authenticated %}
             <form method="post" enctype="multipart/form-data" action="">
                 {% csrf_token %}
                 {{ form.as_p }}<br>
-                <button type="submit" multiple class="btn btn-secondary"> Tweet! </button>
+                <button type="submit" class="btn btn-outline-secondary"> Tweet! </button>
             </form>
         {% endif %}
         </div>

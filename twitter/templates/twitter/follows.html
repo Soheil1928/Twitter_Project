@@ -1,0 +1,35 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %} Follower List {% endblock %}
+
+
+{% block content %}
+<h1 style="margin-left: 80px"> Follower List </h1><br>
+{% if profile %}
+
+    {% for follower in profile.follows.all %}
+    <div class="card mb-3 offset-md-1" style="max-width: 540px;">
+      <div class="row g-0">
+        <div class="col-md-4">
+            {% if follower.profile_image %}
+            <img src="{{ follower.profile_image.url }}" class="img-fluid rounded-start" style="height: 180px">
+            {% else %}
+            <img src="{% static 'profile.jpg' %}" class="img-fluid rounded-start">
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+              <a href="{% url 'profile_detail' follower.user.id %}" style="text-decoration: None">
+                  <h5 class="card-title">@{{ follower.user.username }}</h5>
+              </a>
+            <p class="card-text"></p>
+            <p class="card-text"><small class="text-body-secondary"> {{ profile.date_modified }}</small></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% endfor %}
+{% endif %}
+
+{% endblock %}

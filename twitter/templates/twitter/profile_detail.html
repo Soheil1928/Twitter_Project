@@ -19,7 +19,16 @@
                 <div class="card-body" style="background-color: #d2cece">
                     <p class="card-text" >
                         <b> {{ tweet.text_tweet }} </b><br>
-                        <small> ({{ tweet.create_at }}) By @{{ tweet.user.username }} </small>
+                        <small> ({{ tweet.create_at }}) By @{{ tweet.user.username }}&nbsp; {{ tweet.number_like }}</small>
+                        {% if user in tweet.like.all %}
+                        <a href="{% url 'like' tweet.id %}">
+                            <i class="bi bi-heart-fill" style="color: red"></i>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'like' tweet.id %}">
+                            <i class="bi bi-heart" style="color: red"></i>
+                        </a>
+                    {% endif %}
                     </p>
                 </div>
             </div><br>
@@ -43,9 +52,9 @@
                       <div class="card-header"> <b> Follows </b> </div>
                       <div class="card-body">
                         {% for follow in profile.follows.all|slice:5 %}
-                            <a href="{% url 'profile_detail' follow.user.id %}"> {{ follow }}</a>
+                            <a href="{% url 'profile_detail' follow.user.id %}" style="text-decoration: None"> {{ follow }}</a>
                             {% if user.id == profile.user_id %}
-                            <a href="{% url 'unfollow' follow.user.id %}">
+                            <a href="{% url 'unfollow' follow.user.id %}" style="text-decoration: None">
                                 <i class="bi bi-person-dash"></i>
                             </a>
                             {% endif %}
@@ -53,7 +62,9 @@
                         {% endfor %}
 
                       </div>
-                        <div class="card-footer"> See All </div>
+                        <div class="card-footer">
+                            <a href="{% url 'follower' profile.user.id %}" style="text-decoration: None">See All</a>
+                        </div>
                     </div>
 
 
@@ -64,17 +75,18 @@
                       <div class="card-header"> <b> Follow By </b> </div>
                       <div class="card-body">
                         {% for follow in profile.follow_by.all|slice:5 %}
-                            <a href="{% url 'profile_detail' follow.user.id %}"> {{ follow }}</a>
+                            <a href="{% url 'profile_detail' follow.user.id %}" style="text-decoration: None"> {{ follow }}</a>
                             {% if user.id == profile.user_id %}
-                            <a href="{% url 'follow' follow.user.id %}">
+                            <a href="{% url 'follow' follow.user.id %}" style="text-decoration: None">
                                 <i class="bi bi-person-add"></i>
                             </a>
                             {% endif %}
                             <br>
                         {% endfor %}
-                        <p class="card-text"> </p>
                       </div>
-                        <div class="card-footer"> See All </div>
+                        <div class="card-footer">
+                            <a href="{% url 'following' profile.user.id %}" style="text-decoration: None">See All</a>
+                        </div>
                     </div>
 
                 <form method="post">

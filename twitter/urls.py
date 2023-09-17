@@ -10,4 +10,5 @@ urlpatterns = [
     path('follow/<int:pk>', views.Follow.as_view(), name='follow'),
     path('unfollow/<int:pk>', views.Unfollow.as_view(), name='unfollow'),
     path('like/<int:pk>', views.TweetLike.as_view(), name='like'),
+    path('delete_tweet/<int:pk>', views.DeleteTweet.as_view(), name='delete_tweet'),
 ]

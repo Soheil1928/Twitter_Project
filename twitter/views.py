@@ -141,3 +141,20 @@ class Following(View):
         else:
             messages.success(request, "You Must Be logged To View That Page...", 'danger')
             return redirect('home_page')
+
+
+class DeleteTweet(View):
+    def get(self, request, pk):
+        if request.user.is_authenticated:
+            tweet = get_object_or_404(Tweet, id=pk)
+            if request.user.id == tweet.user.id:
+                tweet.delete()
+                messages.success(request, "The Tweet Has Been Deleted", 'success')
+                return redirect(request.META.get('HTTP_REFERER'))
+            else:
+                messages.error(request, "You Don't Own That tweet!", 'danger')
+                return redirect('home_page')
+
+        else:
+            messages.error(request, 'Please Login To Continue...!', 'danger')
+            return redirect(request.META.get('HTTP_REFERER'))

@@ -21,13 +21,20 @@
                         <b> {{ tweet.text_tweet }} </b><br>
                         <small> ({{ tweet.create_at }}) By @{{ tweet.user.username }}&nbsp; {{ tweet.number_like }}</small>
                         {% if user in tweet.like.all %}
-                        <a href="{% url 'like' tweet.id %}">
+                        <a href="{% url 'like' tweet.id %}" style="text-decoration: None">
                             <i class="bi bi-heart-fill" style="color: red"></i>
                         </a>
                     {% else %}
-                        <a href="{% url 'like' tweet.id %}">
-                            <i class="bi bi-heart" style="color: red"></i>
+                        <a href="{% url 'like' tweet.id %}" style="text-decoration: None">
+                            <i class="bi bi-heart" style="color: red"> </i>
                         </a>
+                    {% endif %}
+
+                    {% if request.user.username == profile.user.username %}
+                        <a href="{% url 'delete_tweet' tweet.id %}" style="text-decoration: None; color: black">
+                            <span class="bi bi-trash3-fill"></span>
+                        </a>
+
                     {% endif %}
                     </p>
                 </div>

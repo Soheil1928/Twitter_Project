@@ -8,7 +8,7 @@
         <div class="col-8">
 
         {% for tweet in user_tweets %}
-        <div class="card" style="width: 30rem;">
+        <div class="card offset-md-2" style="width: 30rem;">
             {% if tweet.image_tweet %}
                 <img src="{{ tweet.image_tweet.url }}" class="card-img-top" >
             {% endif %}

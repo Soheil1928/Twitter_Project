@@ -13,4 +13,5 @@ urlpatterns = [
     path('delete_tweet/<int:pk>', views.DeleteTweet.as_view(), name='delete_tweet'),
     path('search_user/', views.SearchUser.as_view(), name='search_user'),
     path('search_tweet/', views.SearchTweet.as_view(), name='search_tweet'),
+    path('edit_tweet/<int:pk>', views.edit_tweet, name='edit_tweet'),
 ]

@@ -179,3 +179,25 @@ class SearchTweet(View):
         search = request.POST['search_tweet']
         search_db = Tweet.objects.filter(text_tweet__contains=search)
         return render(request, 'twitter/search_tweet.html', {'search_db': search_db})
+
+
+def edit_tweet(request, pk):
+    if request.user.is_authenticated:
+        tweet = get_object_or_404(Tweet, id=pk)
+        if request.user.username == tweet.user.username:
+            form = TweetForm(request.POST or None, instance=tweet)
+            if request.method == 'POST':
+                if form.is_valid():
+                    edit = form.save(commit=False)
+                    edit.user = request.user
+                    edit.save()
+                    messages.success(request, 'Your Twit Has Been Updated!...', 'success')
+                    return redirect('home_page')
+            else:
+                return render(request, 'twitter/edit_tweet.html', {'form': form, 'tweet': tweet})
+        else:
+            messages.error(request, "You Don't Own That twit!", 'danger')
+            return redirect('home_page')
+    else:
+        messages.error(request, 'Please Login To Continue...!', 'danger')
+        return redirect('home_page')

@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.views.generic import DetailView
@@ -158,3 +159,23 @@ class DeleteTweet(View):
         else:
             messages.error(request, 'Please Login To Continue...!', 'danger')
             return redirect(request.META.get('HTTP_REFERER'))
+
+
+class SearchUser(View):
+    def get(self, request):
+        return render(request, 'twitter/search_user.html')
+
+    def post(self, request):
+        search = request.POST['search_user']
+        search_db = User.objects.filter(username__contains=search)
+        return render(request, 'twitter/search_user.html', {'search_db': search_db})
+
+
+class SearchTweet(View):
+    def get(self, request):
+        return render(request, 'twitter/search_tweet.html')
+
+    def post(self, request):
+        search = request.POST['search_tweet']
+        search_db = Tweet.objects.filter(text_tweet__contains=search)
+        return render(request, 'twitter/search_tweet.html', {'search_db': search_db})

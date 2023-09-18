@@ -1,0 +1,45 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %} Profile List {% endblock %}
+
+
+{% block content %}
+
+<h1 style="margin-left: 80px"> Search User </h1><br>
+
+    <div class="container">
+        <form action="" method="post">
+            {% csrf_token %}
+            <input type="search" class="form-control" name="search_user" placeholder="Search User"><br>
+            <button type="submit" class="btn btn-dark"> Search </button>
+        </form><br>
+    </div>
+
+
+
+{% for result in search_db %}
+<div class="card mb-3 offset-md-1" style="max-width: 540px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+        {% if result.profile.profile_image %}
+        <img src="{{ result.profile.profile_image.url }}" class="img-fluid rounded-start" style="height: 180px">
+        {% else %}
+        <img src="{% static 'profile.jpg' %}" class="img-fluid rounded-start">
+        {% endif %}
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+          <a href="{% url 'profile_detail' result.profile.user.id %}" style="text-decoration: None">
+              <h5 class="card-title">@{{ result.profile.user.username }}</h5>
+          </a>
+        <p class="card-text"></p>
+        <p class="card-text"><small class="text-body-secondary"> {{ result.profile.date_modified }}</small></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endfor %}
+
+
+{% endblock %}

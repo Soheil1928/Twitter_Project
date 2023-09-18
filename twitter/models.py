@@ -8,6 +8,7 @@ class Tweet(models.Model):
     create_at = models.DateTimeField(auto_now=True)
     image_tweet = models.ImageField(blank=True, null=True, upload_to='tweet_images/')
     like = models.ManyToManyField(User, related_name='tweet_like')
+    is_archive = models.BooleanField(default=False)
 
     def number_like(self):
         return self.like.count()

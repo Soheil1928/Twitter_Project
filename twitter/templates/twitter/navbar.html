@@ -19,7 +19,11 @@
             </li>
 
             <li class="nav-item">
-            <a class="nav-link" href="{% url 'profile_list' %}"> Profile List </a>
+                <a class="nav-link" href="{% url 'profile_list' %}"> Profile List </a>
+            </li>
+
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'archive_page' %}"> My Archive </a>
             </li>
           {% else %}
               <li class="nav-item">
@@ -53,7 +57,8 @@
                          style="width: 40px;height: 40px;border-radius: 50%">
                 </a>
             {% else %}
-                <a href="{% url 'profile_detail' request.user.id %}">
+                <a href="{% url 'profile_detail' request.user.id %}" style="text-decoration: None">
+                    <span> <b> @{{ request.user.username }} </b></span>
                     <img src="{% static 'profile.jpg' %}" class="img-fluid" alt="Profile Image"
                          style="width: 40px; height: 40px; border-radius: 50%;">
                 </a>

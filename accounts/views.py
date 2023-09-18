@@ -1,9 +1,10 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import RegisterForm, ChangePasswordForm
+from .forms import RegisterForm, ChangePasswordForm, UpdateProfileForm, UpdateUserForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from .models import Profile
 
 
 class RegisterView(View):
@@ -87,3 +88,34 @@ class ChangePasswordView(View):
 
         messages.error(request, 'Username or Password Is Invalid...', 'danger')
         return render(request, 'accounts/change_password.html', {'change_password_form': change_password_form})
+
+
+class UpdateProfile(View):
+    def get(self, request):
+        if request.user.is_authenticated:
+            usr = User.objects.get(id=request.user.id)
+            user_form = UpdateUserForm(instance=usr)
+            prof = Profile.objects.get(id=request.user.id)
+            profile_form = UpdateProfileForm(instance=prof)
+            return render(request, 'accounts/update_profile_page.html', {'user_form': user_form,
+                                                                         'profile_form': profile_form})
+        else:
+            messages.error(request, 'Please Login To Continue...!', 'danger')
+            return redirect('home_page')
+
+    def post(self, request):
+        if request.user.is_authenticated:
+            usr = User.objects.get(id=request.user.id)
+            user_form = UpdateUserForm(request.POST, instance=usr)
+            prof = Profile.objects.get(id=request.user.id)
+            profile_form = UpdateProfileForm(request.POST, request.FILES, instance=prof)
+            if user_form.is_valid() and profile_form.is_valid():
+                user_form.save()
+                profile_form.save()
+                return redirect('home_page')
+            else:
+                return render(request, 'accounts/update_profile_page.html', {'user_form': user_form,
+                                                                             'profile_form': profile_form})
+        else:
+            messages.error(request, 'Please Login To Continue...!', 'danger')
+            return redirect('login')

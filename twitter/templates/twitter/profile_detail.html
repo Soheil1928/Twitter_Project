@@ -20,7 +20,7 @@
                     <p class="card-text" >
                         <b> {{ tweet.text_tweet }} </b><br>
                         <small> ({{ tweet.create_at }}) By @{{ tweet.user.username }}&nbsp; {{ tweet.number_like }}</small>
-                        {% if user in tweet.like.all %}
+                    {% if user in tweet.like.all %}
                         <a href="{% url 'like' tweet.id %}" style="text-decoration: None">
                             <i class="bi bi-heart-fill" style="color: red"></i>
                         </a>
@@ -29,14 +29,18 @@
                             <i class="bi bi-heart" style="color: red"> </i>
                         </a>
                     {% endif %}
-
+                        &nbsp;
                     {% if request.user.username == profile.user.username %}
                         <a href="{% url 'delete_tweet' tweet.id %}" style="text-decoration: None; color: black">
                             <span class="bi bi-trash3-fill"></span>
                         </a>
-
+                        &nbsp;
                         <a href="{% url 'edit_tweet' tweet.id %}" style="text-decoration: None; color: black">
                             <span class="bi bi-pencil-square"></span>
+                        </a>
+                        &nbsp;
+                        <a href="{% url 'archive_tweet' tweet.id %}" style="text-decoration: None; color: black">
+                            <span class="bi bi-archive"></span>
                         </a>
 
 
@@ -113,6 +117,14 @@
                         </button>
                     {% endif %}
                 </form>
+
+                <br>
+
+                <a href="{% url 'update_profile'%}">
+                    <button type="submit" class="btn btn-outline-info" name="follow_name" value="follow">
+                        Update Profile
+                    </button>
+                </a>
 
             </div>
 

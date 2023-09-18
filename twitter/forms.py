@@ -5,7 +5,7 @@ from .models import Tweet
 class TweetForm(forms.ModelForm):
     class Meta:
         model = Tweet
-        exclude = ['user', 'like']
+        exclude = ['user', 'like', "is_archive"]
 
     text_tweet = forms.CharField(label='', widget=forms.Textarea(attrs={'class': 'form-control',
                                                                         'placeholder': 'Enter Your Tweet...'}))

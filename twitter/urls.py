@@ -14,4 +14,6 @@ urlpatterns = [
     path('search_user/', views.SearchUser.as_view(), name='search_user'),
     path('search_tweet/', views.SearchTweet.as_view(), name='search_tweet'),
     path('edit_tweet/<int:pk>', views.edit_tweet, name='edit_tweet'),
+    path('archive_tweet/<int:pk>', views.Archive.as_view(), name='archive_tweet'),
+    path('archive_page/', views.ArchivePage.as_view(), name='archive_page'),
 ]

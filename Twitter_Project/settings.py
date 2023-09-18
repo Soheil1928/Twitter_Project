@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'accounts',
     'twitter',
     'sorl.thumbnail',
+    'django_render_partial',
 
 ]
 

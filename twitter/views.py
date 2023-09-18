@@ -2,8 +2,6 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from django.views.generic import DetailView
-from django.views.generic.list import ListView
 from .models import Tweet
 from .forms import TweetForm
 from accounts.models import Profile
@@ -11,7 +9,7 @@ from accounts.models import Profile
 
 class Home(View):
     def get(self, request):
-        user_tweets = Tweet.objects.all().order_by('-create_at')
+        user_tweets = Tweet.objects.filter(is_archive=False).order_by('-create_at')
         if request.user.is_authenticated:
             form = TweetForm()
             context = {'user_tweets': user_tweets, 'form': form}
@@ -53,7 +51,7 @@ class ProfileDetail(View):
     def get(self, request, pk):
         if request.user.is_authenticated:
             profile = Profile.objects.get(user_id=pk)
-            tweets = Tweet.objects.filter(user_id=pk).order_by('-create_at')
+            tweets = Tweet.objects.filter(user_id=pk, is_archive=False).order_by('-create_at')
             return render(request, 'twitter/profile_detail.html', {'profile': profile, 'tweets': tweets})
 
     def post(self, request, pk):
@@ -177,7 +175,7 @@ class SearchTweet(View):
 
     def post(self, request):
         search = request.POST['search_tweet']
-        search_db = Tweet.objects.filter(text_tweet__contains=search)
+        search_db = Tweet.objects.filter(text_tweet__contains=search, is_archive=False)
         return render(request, 'twitter/search_tweet.html', {'search_db': search_db})
 
 
@@ -201,3 +199,37 @@ def edit_tweet(request, pk):
     else:
         messages.error(request, 'Please Login To Continue...!', 'danger')
         return redirect('home_page')
+
+
+class Archive(View):
+    def get(self, request, pk):
+        if request.user.is_authenticated:
+            tweet_archive = Tweet.objects.get(id=pk)
+
+            if not tweet_archive.is_archive:
+                tweet_archive.is_archive = True
+                tweet_archive.save()
+
+            elif tweet_archive.is_archive:
+                tweet_archive.is_archive = False
+                tweet_archive.save()
+
+            return redirect(request.META.get('HTTP_REFERER'))
+
+        else:
+            messages.error(request, 'Please Login To Continue...!', 'danger')
+            return redirect('home_page')
+
+
+class ArchivePage(View):
+    def get(self, request):
+        if request.user.is_authenticated:
+            tweet_archive = Tweet.objects.filter(is_archive=True)
+            if tweet_archive:
+                return render(request, 'twitter/archive_page.html', {'tweet_archive': tweet_archive})
+            else:
+                messages.warning(request, 'You Have No Archived Tweets...!', 'warning')
+                return redirect('home_page')
+        else:
+            messages.error(request, 'Please Login To Continue...!', 'danger')
+            return redirect('home_page')

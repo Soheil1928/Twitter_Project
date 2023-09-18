@@ -1,0 +1,22 @@
+{% extends 'base/base.html' %}
+{% block title %} Update Profile {% endblock %}
+
+{% block content %}
+
+    <div class="col-md-6 offset-md-3">
+        <h1> Update Profile </h1><br>
+        <form method="post" action="{% url 'update_profile' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ user_form.username.label_tag }}
+            {{ user_form.username }}<br>
+            {{ user_form.email.label_tag }}
+            {{ user_form.email }}<br>
+            {{ user_form.first_name.label_tag }}
+            {{ user_form.first_name }}<br>
+            {{ user_form.last_name.label_tag }}
+            {{ user_form.last_name }}<br>
+            {{ profile_form.as_p }}
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+{% endblock %}

@@ -9,6 +9,7 @@ class Tweet(models.Model):
     image_tweet = models.ImageField(blank=True, null=True, upload_to='tweet_images/')
     like = models.ManyToManyField(User, related_name='tweet_like')
     is_archive = models.BooleanField(default=False)
+    tags = models.ManyToManyField('Tag', related_name='tags_post', blank=True)
 
     def number_like(self):
         return self.like.count()
@@ -17,3 +18,8 @@ class Tweet(models.Model):
         return f'{self.user}-({self.create_at: %Y-%m-%d %H:%M})'
 
 
+class Tag(models.Model):
+    tag_word = models.CharField(max_length=50, unique=True, null=True, blank=True)
+
+    def __str__(self):
+        return self.tag_word

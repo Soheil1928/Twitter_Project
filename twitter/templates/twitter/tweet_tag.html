@@ -1,0 +1,20 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %} Profile List {% endblock %}
+
+
+{% block content %}
+
+<h1 style="margin-left: 80px"> Define Tags </h1><br>
+
+    <div class="container">
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ tag_form }}<br>
+            <button type="submit" class="btn btn-dark"> Submit </button>
+        </form><br>
+    </div>
+
+    
+
+{% endblock %}

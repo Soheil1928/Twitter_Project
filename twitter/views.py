@@ -2,8 +2,8 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from .models import Tweet
-from .forms import TweetForm
+from .models import Tweet, Tag
+from .forms import TweetForm, TagForm
 from accounts.models import Profile
 
 
@@ -20,11 +20,11 @@ class Home(View):
     def post(self, request):
         if request.user.is_authenticated:
             form = TweetForm(request.POST, request.FILES)
-
             if form.is_valid():
                 tweet = form.save(commit=False)
                 tweet.user = request.user
                 tweet.save()
+                form.save_m2m()
 
                 messages.success(request, 'Your Twit Has Been Posted!...', 'success')
                 return redirect('home_page')
@@ -232,4 +232,29 @@ class ArchivePage(View):
                 return redirect('home_page')
         else:
             messages.error(request, 'Please Login To Continue...!', 'danger')
+            return redirect('home_page')
+
+
+class TweetTag(View):
+    def get(self, request):
+        if request.user.is_authenticated:
+            tags = Tag.objects.all()
+            tag_form = TagForm()
+            return render(request, 'twitter/tweet_tag.html', {'tag_form': tag_form, 'tags': tags})
+        else:
+            messages.error(request, 'You Must Be Logged In View This Page ...', 'danger')
+            return redirect('home_page')
+
+    def post(self, request):
+        if request.user.is_authenticated:
+            tag_form = TagForm(request.POST)
+            if tag_form.is_valid():
+                tag_form.save()
+                messages.success(request, 'Your Tags Submitted ...', 'success')
+                return render(request, 'twitter/tweet_tag.html', {'tag_form': tag_form})
+            else:
+                return redirect(request.META.get('HTTP_REFERER'))
+
+        else:
+            messages.error(request, 'You Must Be Logged In View This Page ...', 'danger')
             return redirect('home_page')

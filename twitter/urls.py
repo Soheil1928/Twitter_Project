@@ -16,4 +16,5 @@ urlpatterns = [
     path('edit_tweet/<int:pk>', views.edit_tweet, name='edit_tweet'),
     path('archive_tweet/<int:pk>', views.Archive.as_view(), name='archive_tweet'),
     path('archive_page/', views.ArchivePage.as_view(), name='archive_page'),
+    path('tweet_tag/', views.TweetTag.as_view(), name='tweet_tag'),
 ]

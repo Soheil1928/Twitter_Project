@@ -1,5 +1,5 @@
 from django import forms
-from .models import Tweet
+from .models import Tweet, Tag
 
 
 class TweetForm(forms.ModelForm):
@@ -12,3 +12,10 @@ class TweetForm(forms.ModelForm):
     image_tweet = forms.ImageField(label='', required=False)
 
 
+class TagForm(forms.ModelForm):
+    class Meta:
+        model = Tag
+        fields = ['tag_word']
+
+    tag_word = forms.CharField(label='', widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                       'placeholder': 'Enter Your Tag ...'}))

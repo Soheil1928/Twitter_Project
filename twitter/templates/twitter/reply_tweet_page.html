@@ -1,0 +1,87 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+        <h1 style="margin-left: 80px"> Reply </h1><br>
+
+<div class="container">
+    <div class="row">
+
+
+
+
+
+
+    </div>
+</div>
+<div class="container">
+        <div class="row">
+            <div class="col-8">
+                    <div class="card offset-md-2" style="width: 40rem;border-radius: 5px 5px 5px 5px">
+                        {% if tweet.image_tweet %}
+                            <img src="{{ tweet.image_tweet.url }}" class="card-img-top" >
+                        {% endif %}
+
+                        <div class="card-body " style="background-color: #d2cece; width: 40rem;border-radius: 0px 0px 5px 5px">
+                            <p class="card-text text-center" >
+                                <b> {{ tweet.text_tweet }} </b><br>
+
+                                {% if tweet.user.profile.profile_image %}
+                                    <img src="{{ tweet.user.profile.profile_image.url }}"
+                                         style="width: 40px;height: 40px; border-radius: 50%;">
+                                {% else %}
+                                    <img src="{% static 'profile.jpg' %}"
+                                         style="width: 40px;height: 40px; border-radius: 50%;">
+                                {% endif %}
+                                                        &nbsp;
+                                <small> ({{ tweet.create_at }}) By
+                                    <a href="{% url 'profile_detail' tweet.user_id %}" style="text-decoration: None">
+                                        <b>@{{ tweet.user.username }}</b>
+                                    </a>  {{ tweet.number_like }}
+                                </small>
+
+                                {% if user in tweet.like.all %}
+                                    <a href="{% url 'like' tweet.id %}" style="text-decoration: None">
+                                        <i class="bi bi-heart-fill" style="color: red"></i>
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'like' tweet.id %}" style="text-decoration: None">
+                                        <i class="bi bi-heart" style="color: red"></i>
+                                    </a>
+                                {% endif %}
+
+                            </p>
+                                                {#Tags#}
+                            <p class="card-text">
+                            <b> tags: </b>
+                                <small>
+                                    <i>
+                                    {% for tag in tweet.tags.all %}
+                                        {{ tag }}
+                                    {% endfor %}
+                                    </i>
+                                </small>
+                            </p>
+
+                        </div>
+                    </div>
+                    <br>
+
+
+            </div>
+              <div class="col-4">
+                <form method="post" enctype="multipart/form-data" action="">
+                    {% csrf_token %}
+                    {{ reply_tweet_form.as_p }}
+                    <button type="submit" class="btn btn-outline-dark"> Reply! </button>
+                </form>
+            </div>
+
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}

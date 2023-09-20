@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Tweet, Tag
+from .models import Tweet, Tag, ReplyTweet
 
 
 @admin.register(Tweet)
@@ -11,3 +11,8 @@ class TweetAdmin(admin.ModelAdmin):
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(ReplyTweet)
+class ReplyTweetAdmin(admin.ModelAdmin):
+    list_display = ['id', 'tweet', 'user', 'parent', 'text']

@@ -1,0 +1,63 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+        <h1 style="margin-left: 80px"> Reply </h1><br>
+
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+
+                <div class="card offset-md-0" style="width: 40rem;border-radius: 5px 5px 5px 5px">
+
+                    <div class="card-body " style="background-color: #d2cece; width: 40rem;border-radius: 0px 0px 5px 5px">
+                        <p class="card-text text-center" >
+                            <b> {{ reply.text }} </b><br>
+
+                            {% if reply.user.profile.profile_image %}
+                                <img src="{{ reply.user.profile.profile_image.url }}"
+                                     style="width: 40px;height: 40px; border-radius: 50%;">
+                            {% else %}
+                                <img src="{% static 'profile.jpg' %}"
+                                     style="width: 40px;height: 40px; border-radius: 50%;">
+                            {% endif %}
+                                                    &nbsp;
+                            <small> ({{ reply.create_date }}) By
+                                <a href="{% url 'profile_detail' reply.user_id %}" style="text-decoration: None">
+                                    <b>@{{ reply.user.username }}</b>
+                                </a>
+                            </small>
+
+                        </p>
+                        <small> Reply To: ({{ reply.parent }})</small>
+
+                    </div>
+                </div>
+                <br>
+
+
+
+
+
+
+        </div>
+
+              <div class="col-4">
+                <form method="post" enctype="multipart/form-data" action="">
+                    {% csrf_token %}
+                    {{ reply_reply_form.as_p }}
+                    <button type="submit" class="btn btn-outline-dark"> Tweet! </button>
+                </form>
+            </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+{% endblock %}

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Tweet, Tag
+from .models import Tweet, Tag, ReplyTweet
 
 
 class TweetForm(forms.ModelForm):
@@ -19,3 +19,11 @@ class TagForm(forms.ModelForm):
 
     tag_word = forms.CharField(label='', widget=forms.TextInput(attrs={'class': 'form-control',
                                                                        'placeholder': 'Enter Your Tag ...'}))
+
+
+class ReplyTweetForm(forms.ModelForm):
+    class Meta:
+        model = ReplyTweet
+        fields = ['text']
+    text = forms.CharField(label='', widget=forms.Textarea(attrs={'class': 'form-control',
+                                                                  'placeholder': 'Enter Your Reply Tweet...'}))

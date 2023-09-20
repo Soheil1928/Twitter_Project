@@ -23,3 +23,14 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.tag_word
+
+
+class ReplyTweet(models.Model):
+    tweet = models.ForeignKey(Tweet, on_delete=models.CASCADE)
+    parent = models.ForeignKey('ReplyTweet', blank=True, null=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    text = models.TextField()
+
+    def __str__(self):
+        return self.text

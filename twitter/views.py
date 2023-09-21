@@ -188,7 +188,7 @@ def edit_tweet(request, pk):
     if request.user.is_authenticated:
         tweet = get_object_or_404(Tweet, id=pk)
         if request.user.username == tweet.user.username:
-            form = TweetForm(request.POST or None, instance=tweet)
+            form = TweetForm(request.POST or None, request.FILES or None, instance=tweet)
             if request.method == 'POST':
                 if form.is_valid():
                     edit = form.save(commit=False)

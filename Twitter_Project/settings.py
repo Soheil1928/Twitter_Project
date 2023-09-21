@@ -39,8 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'twitter',
-    'sorl.thumbnail',
-    'django_render_partial',
 
 ]
 
